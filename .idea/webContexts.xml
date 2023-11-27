@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/addBook.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/allBooks.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/login.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/cards/livrosAntigos.jsp" value="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/cards" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/cards/livrosNovos.jsp" value="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/cards" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/footer.jsp" value="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/navBar/navBar.jsp" value="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/navBar" />
+      </map>
+    </option>
+  </component>
+</project>
