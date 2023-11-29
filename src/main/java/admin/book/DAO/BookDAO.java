@@ -16,7 +16,16 @@ public interface BookDAO {
 
     boolean deleteBook(int id) throws SQLException;
 
+    List<Book> getNewBooks();
+
+    List<Book> getRecentBooks();
+
+    List<Book> getOldBook();
+
     List<Book> getAllNewBooks();
+
     List<Book> getAllRecentBooks();
+
     List<Book> getAllOldBooks();
+
 }

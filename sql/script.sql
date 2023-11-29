@@ -74,7 +74,9 @@ CREATE TABLE "book_dtls"
 SELECT *
 FROM public.book_dtls;
 
-SELECT * FROM public.book_dtls WHERE bookCategory='New Book';
+SELECT *
+FROM public.book_dtls
+WHERE bookid = 7;
 
 ALTER TABLE book_dtls
     ALTER COLUMN status TYPE VARCHAR(15);

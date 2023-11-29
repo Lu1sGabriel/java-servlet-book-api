@@ -22,9 +22,27 @@
                         <span class="visually-hidden">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-book pe-2"></i>Recent Books</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-book pe-2"></i>New books</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-book pe-2"></i>Old books</a></li>
+                        <li>
+                            <a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/viewAll/allNewBooks.jsp">
+                                <i class="fa-solid fa-book pe-2"></i>
+                                New books
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/viewAll/allRecentBooks.jsp">
+                                <i class="fa-solid fa-bookmark pe-2"></i>
+                                Recent Books
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/viewAll/allOldBooks.jsp">
+                                <i class="fa-solid fa-person-cane pe-2"></i>
+                                Old books
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </form>

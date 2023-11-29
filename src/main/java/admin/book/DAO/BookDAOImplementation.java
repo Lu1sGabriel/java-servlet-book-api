@@ -39,7 +39,21 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     }
 
     @Override
-    public List<Book> getAllNewBooks() {
+    public Book getBookById(int id) throws SQLException {
+        final String selectSQL = "SELECT bookID, bookName, author, price, bookCategory, status, photo, email FROM public.book_dtls WHERE bookID=?";
+        return executeQuery(selectSQL, statement -> {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapToBookModel(resultSet);
+                }
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public List<Book> getNewBooks() {
         final String getAllSQL = "SELECT * FROM public.book_dtls WHERE bookCategory=? and status=? ORDER BY bookID DESC";
         try {
             return executeQuery(getAllSQL, statement -> {
@@ -61,7 +75,7 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     }
 
     @Override
-    public List<Book> getAllRecentBooks() {
+    public List<Book> getRecentBooks() {
         final String getAllRecentBooksSQL = "SELECT * FROM public.book_dtls WHERE status=? ORDER BY bookID DESC";
         try {
             return executeQuery(getAllRecentBooksSQL, statement -> {
@@ -82,7 +96,7 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     }
 
     @Override
-    public List<Book> getAllOldBooks() {
+    public List<Book> getOldBook() {
         final String getAllOldBooksSQL = "SELECT * FROM public.book_dtls WHERE bookCategory=? and status=? ORDER BY bookID DESC";
         try {
             return executeQuery(getAllOldBooksSQL, statement -> {
@@ -104,17 +118,60 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     }
 
     @Override
-    public Book getBookById(int id) throws SQLException {
-        final String selectSQL = "SELECT bookID, bookName, author, price, bookCategory, status, photo, email FROM public.book_dtls WHERE bookID=?";
-        return executeQuery(selectSQL, statement -> {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return mapToBookModel(resultSet);
+    public List<Book> getAllNewBooks() {
+        final String getAllSQL = "SELECT * FROM public.book_dtls WHERE bookCategory=? ORDER BY bookID DESC";
+        try {
+            return executeQuery(getAllSQL, statement -> {
+                statement.setString(1, "New Book");
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    List<Book> bookList = new ArrayList<>();
+                    while (resultSet.next()) {
+                        bookList.add(mapToBookModel(resultSet));
+                    }
+                    return bookList;
                 }
-                return null;
-            }
-        });
+            });
+        } catch (SQLException sqlex) {
+            throw new RuntimeException(sqlex);
+        }
+    }
+
+    @Override
+    public List<Book> getAllRecentBooks() {
+        final String getAllRecentBooksSQL = "SELECT * FROM public.book_dtls WHERE status=? ORDER BY bookID DESC";
+        try {
+            return executeQuery(getAllRecentBooksSQL, statement -> {
+                statement.setString(1, "Active");
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    List<Book> bookList = new ArrayList<>();
+                    while (resultSet.next()) {
+                        bookList.add(mapToBookModel(resultSet));
+                    }
+                    return bookList;
+                }
+            });
+        } catch (SQLException sqlex) {
+            throw new RuntimeException(sqlex);
+        }
+    }
+
+    @Override
+    public List<Book> getAllOldBooks() {
+        final String getAllOldBooksSQL = "SELECT * FROM public.book_dtls WHERE bookCategory=? ORDER BY bookID DESC";
+        try {
+            return executeQuery(getAllOldBooksSQL, statement -> {
+                statement.setString(1, "Old Book");
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    List<Book> bookList = new ArrayList<>();
+                    while (resultSet.next()) {
+                        bookList.add(mapToBookModel(resultSet));
+                    }
+                    return bookList;
+                }
+            });
+        } catch (SQLException sqlex) {
+            throw new RuntimeException(sqlex);
+        }
     }
 
     @Override

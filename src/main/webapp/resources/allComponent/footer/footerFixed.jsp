@@ -1,4 +1,4 @@
-<footer class="stick-bottom">
+<footer class="fixed-bottom">
     <section class="bg-light py-5 py-xl-8 py-xxl-10 border-top border-light">
         <div class="container">
             <div class="row gy-5 gy-md-0">

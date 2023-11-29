@@ -1,7 +1,7 @@
 package admin.book.servlet;
 
-import admin.book.DAO.BookDAOImplementation;
 import admin.book.DAO.BookDAO;
+import admin.book.DAO.BookDAOImplementation;
 import admin.book.model.Book;
 import org.json.JSONObject;
 import utils.ServletActions;
@@ -85,8 +85,8 @@ public class BookServlet extends HttpServlet {
             boolean itsUpToDate = bookDAO.editBook(book);
 
             HttpSession httpSession = request.getSession();
-            httpSession.setAttribute(itsUpToDate ? "successMessage" : "failMessage", itsUpToDate ? "Book updated successfully!"
-                    : "The book has not been updated.");
+            httpSession.setAttribute(itsUpToDate ? "successMessage" : "failMessage",
+                    itsUpToDate ? "Book updated successfully!" : "The book has not been updated.");
             response.sendRedirect("./auth/admin/books/allBooks.jsp");
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
