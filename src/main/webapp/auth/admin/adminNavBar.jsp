@@ -35,22 +35,23 @@
 
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa-solid fa-book pe-2"></i>
-                                Recent Books
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/viewAll/allNewBooks.jsp">
                                 <i class="fa-solid fa-book pe-2"></i>
                                 New books
                             </a>
                         </li>
-
                         <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa-solid fa-book pe-2"></i>
+                            <a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/viewAll/allRecentBooks.jsp">
+                                <i class="fa-solid fa-bookmark pe-2"></i>
+                                Recent Books
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/viewAll/allOldBooks.jsp">
+                                <i class="fa-solid fa-person-cane pe-2"></i>
                                 Old books
                             </a>
                         </li>
@@ -66,6 +67,11 @@
                     <i class="fa-solid fa-right-from-bracket pe-1"></i>
                     ${userModelObj.name}
                 </button>
+
+                <a href="${pageContext.request.contextPath}/auth/admin/admHome.jsp" class="btn btn-secondary">
+                    <i class="fa-solid fa-screwdriver-wrench p-2"></i>
+                    Control panel
+                </a>
 
                 <div class="btn-group" role="group">
 
@@ -86,13 +92,6 @@
                             <a class="dropdown-item" href="#">
                                 <i class="fa-solid fa-phone p-2"></i>
                                 Contact Us
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/auth/admin/admHome.jsp">
-                                <i class="fa-solid fa-screwdriver-wrench p-2"></i>
-                                Control panel
                             </a>
                         </li>
                     </ul>

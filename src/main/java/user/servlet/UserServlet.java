@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serial;
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Map;
@@ -30,9 +29,14 @@ public class UserServlet extends HttpServlet {
     private UserDAO userDAO;
     private RolerDAO rolerDAO;
 
-    private final Map<String, ServletActions> actions = Map.of(
-            "REGISTER", this::register,
-            "LOGIN", this::login
+    private enum Actions {
+        REGISTER,
+        LOGIN
+    }
+
+    private final Map<Actions, ServletActions> actions = Map.of(
+            Actions.REGISTER, this::register,
+            Actions.LOGIN, this::login
     );
 
     @Override
@@ -42,16 +46,17 @@ public class UserServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("UTF-8");
-        String actionParam = request.getParameter("action");
-        ServletActions action = actions.get(actionParam.toUpperCase());
-        if (action != null) {
-            action.execute(request, response);
-        } else {
-            throw new IllegalArgumentException("Action not supported: " + actionParam);
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            request.setCharacterEncoding("UTF-8");
+            String actionParam = request.getParameter("action");
+            Actions action = Actions.valueOf(actionParam.toUpperCase());
+            actions.get(action).execute(request, response);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action not supported");
         }
     }
+
 
     private void register(HttpServletRequest request, HttpServletResponse response) {
         HttpSession httpSession = request.getSession();

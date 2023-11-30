@@ -88,3 +88,21 @@ ALTER TABLE book_dtls
 SELECT datname, pg_encoding_to_char(encoding)
 FROM pg_database;
 
+-- Tabela carrinho de compras:
+
+CREATE TABLE "cart"
+(
+    cartId    BIGSERIAL,
+    bookIdFK  BIGINT  NOT NULL,
+    userIdFk  BIGINT  NOT NULL,
+    book_name VARCHAR NOT NULL,
+    author    VARCHAR NOT NULL,
+    price     VARCHAR NOT NULL,
+    CONSTRAINT cart_id PRIMARY KEY (cartId),
+    CONSTRAINT fk_book_bookId FOREIGN KEY (bookIdFK) REFERENCES public.book_dtls (bookid) ON DELETE CASCADE,
+    CONSTRAINT fk_user_userId FOREIGN KEY (userIdFk) REFERENCES public."user" (userid) ON DELETE CASCADE
+);
+
+SELECT * FROM public.cart;
+
+SELECT * FROM public.cart WHERE useridfk = 1;

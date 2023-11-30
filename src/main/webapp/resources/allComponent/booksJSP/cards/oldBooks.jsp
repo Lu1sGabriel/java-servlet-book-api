@@ -1,3 +1,8 @@
+<%@ page import="user.model.UserDetails" %>
+<%
+    UserDetails userOldBook = (UserDetails) session.getAttribute("userModelObj");
+%>
+
 <div class="container">
 
     <div class="container text-center">
@@ -45,6 +50,7 @@
                                  style="width: 100%;">
 
                                 <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=oldBookModel.getBookId()%>"
+
                                    class="btn btn-outline-success">
                                     <i class="fa-solid fa-circle-info px-1"></i>
                                     Details

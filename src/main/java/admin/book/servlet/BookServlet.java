@@ -13,7 +13,6 @@ import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serial;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -24,10 +23,16 @@ public class BookServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private BookDAO bookDAO;
 
-    private final Map<String, ServletActions> actions = Map.of(
-            "REGISTER", this::registerBook,
-            "EDIT", this::editBook,
-            "DELETED", this::deleteBook
+    private enum Actions {
+        REGISTER,
+        EDIT,
+        DELETED
+    }
+
+    private final Map<Actions, ServletActions> actions = Map.of(
+            Actions.REGISTER, this::registerBook,
+            Actions.EDIT, this::editBook,
+            Actions.DELETED, this::deleteBook
     );
 
     @Override
@@ -36,14 +41,14 @@ public class BookServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("UTF-8");
-        String actionParam = request.getParameter("action");
-        ServletActions action = actions.get(actionParam.toUpperCase());
-        if (action != null) {
-            action.execute(request, response);
-        } else {
-            throw new IllegalArgumentException("Action not supported: " + actionParam);
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            request.setCharacterEncoding("UTF-8");
+            String actionParam = request.getParameter("action");
+            Actions action = Actions.valueOf(actionParam.toUpperCase());
+            actions.get(action).execute(request, response);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action not supported");
         }
     }
 

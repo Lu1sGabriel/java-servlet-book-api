@@ -13,18 +13,14 @@ public class UserDAOImplementation extends AbstractDAO implements UserDAO {
     @Override
     public User userRegister(User userModel) throws SQLException {
         final String insertSQL = "INSERT INTO public.user (name, email, phno, password) VALUES (?, ?, ?, ?) RETURNING userId";
-        return executeQuery(insertSQL, statement -> {
-            statement.setString(1, userModel.getName());
-            statement.setString(2, userModel.getEmail());
-            statement.setString(3, userModel.getPhno());
-            statement.setString(4, userModel.getPassword());
+        return executeQueryWithParameters(statement -> {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     userModel.setId(resultSet.getInt(1));
                 }
                 return userModel;
             }
-        });
+        }, insertSQL, userModel.getName(), userModel.getEmail(), userModel.getPhno(), userModel.getPassword());
     }
 
 

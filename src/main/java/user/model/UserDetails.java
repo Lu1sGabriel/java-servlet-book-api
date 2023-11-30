@@ -34,4 +34,12 @@ public class UserDetails {
     public void setRolers(List<String> rolers) {
         this.rolers = rolers;
     }
+
+    @Override
+    public String toString() {
+        return "UserDetails{" +
+                "user=" + user +
+                ", rolers=" + rolers +
+                '}';
+    }
 }

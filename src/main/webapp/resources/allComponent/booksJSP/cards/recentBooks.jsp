@@ -1,3 +1,7 @@
+<%@ page import="user.model.UserDetails" %>
+<%
+    UserDetails userRecentBook = (UserDetails) session.getAttribute("userModelObj");
+%>
 <div class="container">
 
     <div class="container text-center">
@@ -44,11 +48,30 @@
                             <div class="btn-group btn-group-sm" role="group" aria-label="Small button group"
                                  style="width: 100%;">
 
-                                <% if (!recentBooksModel.getBookCategory().equals("Old Book")) { %>
-                                <a href="" class="btn btn-outline-danger">
+                                <% if (recentBooksModel.getBookCategory().equals("Old Book")) { %>
+                                <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=recentBooksModel.getBookId()%>"
+                                   class="btn btn-outline-success">
+                                    <i class="fa-solid fa-circle-info px-1"></i>
+                                    Details
+                                </a>
+
+                                <% } else { %>
+
+                                <% if (userRecentBook != null && userRecentBook.getUser() != null) { %>
+
+                                <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=recentBooksModel.getBookId()%>&user=<%=userRecentBook.getUser().getEmail()%>"
+                                   class="btn btn-outline-danger">
                                     <i class="fa-solid fa-cart-plus px-1"></i>
                                     Add
                                 </a>
+
+                                <% } else { %>
+
+                                <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-outline-danger">
+                                    <i class="fa-solid fa-cart-plus px-1"></i>
+                                    Add
+                                </a>
+
                                 <% } %>
 
                                 <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=recentBooksModel.getBookId()%>"
@@ -57,7 +80,9 @@
                                     Details
                                 </a>
 
-                                <a href="" class="btn btn-outline-primary">
+                                <% } %>
+
+                                <a class="btn btn-outline-primary">
                                     <i class="fa-solid fa-brazilian-real-sign px-1"></i>
                                     <%=recentBooksModel.getPrice()%>
                                 </a>
@@ -65,6 +90,7 @@
                             </div>
                         </div>
                         <%--    Fim card footer    --%>
+
 
                     </div>
                 </div>

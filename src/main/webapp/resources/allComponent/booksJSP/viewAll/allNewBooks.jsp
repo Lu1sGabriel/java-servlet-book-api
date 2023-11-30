@@ -63,7 +63,7 @@
                                     <i class="fa-solid fa-circle-info px-1"></i>
                                     Details
                                 </a>
-                                <a href="" class="btn btn-outline-primary">
+                                <a class="btn btn-outline-primary">
                                     <i class="fa-solid fa-brazilian-real-sign px-1"></i>
                                     <%=allNewBooksModel.getPrice()%>
                                 </a>

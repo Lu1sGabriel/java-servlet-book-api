@@ -2,6 +2,8 @@
 <%@ page import="admin.book.DAO.BookDAOImplementation" %>
 <%@ page import="java.util.List" %>
 <%@ page import="admin.book.model.Book" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -27,6 +29,33 @@
     </div>
 </div>
 <!--    Fim banner  -->
+
+<div class="container">
+    <c:if test="${not empty successMessage }">
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+            <i class="fa-solid fa-thumbs-up pe-2"></i>
+            <strong>That's good!</strong>
+                ${successMessage}
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert" aria-label="Close"></button>
+            <c:remove var="successMessage" scope="session"/>
+        </div>
+    </c:if>
+
+    <c:if test="${not empty sessionScope.failMessage}">
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+            <i class="fa-solid fa-triangle-exclamation pe-2"></i>
+            <strong class="pe-1">Holy guacamole!</strong>
+                ${sessionScope.failMessage}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+        <c:remove var="failMessage" scope="session"/>
+    </c:if>
+</div>
+
 
 <%--Início card novos livros--%>
 <%@include file="resources/allComponent/booksJSP/cards/newBooks.jsp" %>

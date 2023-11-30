@@ -30,6 +30,18 @@ public class AbstractDAO {
         }
     }
 
+    protected <T> T executeQueryWithParameters(SqlFunction<PreparedStatement, T> function, String sql, Object... parameters) throws SQLException {
+        connect();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < parameters.length; i++) {
+                statement.setObject(i + 1, parameters[i]);
+            }
+            return function.apply(statement);
+        } finally {
+            disconnect();
+        }
+    }
+
     protected void executeUpdate(String sql, SqlConsumer<PreparedStatement> consumer) throws SQLException {
         connect();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -38,6 +50,7 @@ public class AbstractDAO {
             disconnect();
         }
     }
+
 
     @FunctionalInterface
     public interface SqlFunction<T, R> {
@@ -48,4 +61,5 @@ public class AbstractDAO {
     public interface SqlConsumer<T> {
         void accept(T t) throws SQLException;
     }
+
 }

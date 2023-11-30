@@ -8,6 +8,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/login.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/booksJSP/cards/recentBooks.jsp" value="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/booksJSP/cards" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/booksJSP/details/bookDetail.jsp" value="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/booksJSP/details" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/cards/livrosAntigos.jsp" value="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/cards" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/cards/livrosNovos.jsp" value="file://$PROJECT_DIR$/src/main/webapp/resources/allComponent/cards" />

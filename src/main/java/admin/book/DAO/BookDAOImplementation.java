@@ -12,17 +12,11 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     @Override
     public boolean addBook(Book bookModel) throws SQLException {
         final String insertSQL = "INSERT INTO public.book_dtls (bookName, author, price, bookCategory, status, photo, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        return executeQuery(insertSQL, statement -> {
-            statement.setString(1, bookModel.getBookName());
-            statement.setString(2, bookModel.getAuthor());
-            statement.setString(3, bookModel.getPrice());
-            statement.setString(4, bookModel.getBookCategory());
-            statement.setString(5, bookModel.getStatus());
-            statement.setString(6, bookModel.getPhoto());
-            statement.setString(7, bookModel.getEmail());
-            return statement.executeUpdate() == 1;
-        });
+        return executeQueryWithParameters(statement -> statement.executeUpdate() == 1,
+                insertSQL, bookModel.getBookName(), bookModel.getAuthor(), bookModel.getPrice(), bookModel.getBookCategory(),
+                bookModel.getStatus(), bookModel.getPhoto(), bookModel.getEmail());
     }
+
 
     @Override
     public List<Book> getAllBooks() throws SQLException {
