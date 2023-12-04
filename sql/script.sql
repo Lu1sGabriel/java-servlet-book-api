@@ -56,8 +56,6 @@ FROM public.user_roler;
 
 -- Tabela dos livros.
 
-DROP TABLE book_dtls;
-
 CREATE TABLE "book_dtls"
 (
     bookID       BIGSERIAL,
@@ -70,6 +68,10 @@ CREATE TABLE "book_dtls"
     email        VARCHAR,
     CONSTRAINT book_key PRIMARY KEY (bookID)
 );
+
+
+ALTER TABLE book_dtls
+    ALTER COLUMN price TYPE NUMERIC(5, 2) USING price::numeric(5, 2);
 
 SELECT *
 FROM public.book_dtls;
@@ -103,6 +105,14 @@ CREATE TABLE "cart"
     CONSTRAINT fk_user_userId FOREIGN KEY (userIdFk) REFERENCES public."user" (userid) ON DELETE CASCADE
 );
 
-SELECT * FROM public.cart;
+ALTER TABLE cart
+    ALTER COLUMN price TYPE NUMERIC(5, 2) USING price::numeric(5, 2);
 
-SELECT * FROM public.cart WHERE useridfk = 1;
+
+SELECT *
+FROM public.cart where bookIdFK = 2 ;
+
+SELECT *
+FROM public.cart
+WHERE useridfk = 3;
+

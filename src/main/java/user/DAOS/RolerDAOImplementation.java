@@ -21,15 +21,6 @@ public class RolerDAOImplementation extends AbstractDAO implements RolerDAO {
     }
 
     @Override
-    public void deleteRole(User user) throws SQLException {
-        final String deleteSQL = "DELETE FROM public.user_roler WHERE userIdFk=?";
-        executeUpdate(deleteSQL, statement -> {
-            statement.setInt(1, user.getId());
-            statement.executeUpdate();
-        });
-    }
-
-    @Override
     public Roler searchRolerByType(String type) throws SQLException {
         final String searchSQL = "SELECT rolerId, roleType FROM public.roler WHERE roleType=?";
         return executeQuery(searchSQL, statement -> {

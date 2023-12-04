@@ -1,10 +1,11 @@
-package admin.book.servlet;
+package admin.cart.servlet;
 
 import admin.book.DAO.BookDAO;
 import admin.book.DAO.BookDAOImplementation;
-import admin.book.DAO.CartDAO;
-import admin.book.DAO.CartDAOImplementation;
+import admin.cart.DAO.CartDAO;
+import admin.cart.DAO.CartDAOImplementation;
 import admin.book.model.Book;
+import admin.cart.model.Cart;
 import user.DAOS.UserDAO;
 import user.DAOS.UserDAOImplementation;
 import user.model.User;
@@ -24,17 +25,18 @@ import java.util.Map;
 public class CartServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
-
     private CartDAO cartDAO;
     private BookDAO bookDAO;
     private UserDAO userDAO;
 
     private enum Actions {
-        ADD_CART
+        ADD_CART,
+        DELETE_FROM_CART
     }
 
     private final Map<Actions, ServletActions> actions = Map.of(
-            Actions.ADD_CART, this::addCart
+            Actions.ADD_CART, this::addCart,
+            Actions.DELETE_FROM_CART, this::deleteFromCart
     );
 
     @Override
@@ -61,13 +63,30 @@ public class CartServlet extends HttpServlet {
             Book bookModel = bookDAO.getBookById(Integer.parseInt(request.getParameter("book")));
             User userModel = userDAO.findUserByLogin(request.getParameter("user"));
             boolean hasBeenInserted = cartDAO.insertProduct(bookModel, userModel);
-            HttpSession httpSession = request.getSession();
-            httpSession.setAttribute(hasBeenInserted ? "successMessage" : "failMessage",
-                    hasBeenInserted ? "The book has been successfully added to the cart!" : "The book was not added to the cart.");
-            response.sendRedirect("index.jsp");
+            setSessionAttributeAndRedirect(request, response, hasBeenInserted, "The book has been successfully added to the cart!",
+                    "The book was not added to the cart.", "index.jsp");
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private void deleteFromCart(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Cart cartModel = cartDAO.getCartById(Integer.parseInt(request.getParameter("cartId")));
+            User userModel = userDAO.findUserByLogin(request.getParameter("userObj"));
+            boolean hasBeenDeleted = cartDAO.deleteFromCart(cartModel, userModel);
+            setSessionAttributeAndRedirect(request, response, hasBeenDeleted, "The book has been successfully deleted from the cart!",
+                    "The book was not deleted from the cart.", "cart.jsp");
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setSessionAttributeAndRedirect(HttpServletRequest request, HttpServletResponse response, boolean condition,
+                                                String successMessage, String failMessage, String redirectPage) throws IOException {
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute(condition ? "successMessage" : "failMessage", condition ? successMessage : failMessage);
+        response.sendRedirect(redirectPage);
     }
 }

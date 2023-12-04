@@ -52,12 +52,12 @@
                                 <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=oldBookModel.getBookId()%>"
 
                                    class="btn btn-outline-success">
-                                    <i class="fa-solid fa-circle-info px-1"></i>
+                                    <i class="fa-solid fa-circle-info pe-1"></i>
                                     Details
                                 </a>
 
                                 <a class="btn btn-outline-primary">
-                                    <i class="fa-solid fa-brazilian-real-sign px-1"></i>
+                                    <i class="fa-solid fa-brazilian-real-sign pe-1"></i>
                                     <%=oldBookModel.getPrice()%>
                                 </a>
 

@@ -56,8 +56,9 @@
                                             <i class="fa-solid fa-thumbs-up pe-2"></i>
                                             <strong>That's good!</strong>
                                                 ${successMessage}
-                                            <button type="button" class="btn-close"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close">
+                                            </button>
                                             <c:remove var="successMessage" scope="session"/>
                                         </div>
                                     </c:if>

@@ -7,16 +7,27 @@
     <title>Title</title>
 </head>
 <body>
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-body fixed-top">
         <div class="container-fluid">
+
             <a href="${pageContext.request.contextPath}/index.jsp" class="navbar-brand mb-0 h1"
-               style="font-size: xx-large;"><i
-                    class="fa-solid fa-book pe-2"></i>E-Book</a>
+               style="font-size: xx-large;">
+                <i class="fa-solid fa-book pe-2"></i>
+                E-Book
+            </a>
+
             <form class="d-flex col-lg-4">
+
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+
                 <div class="btn-group">
-                    <button type="button" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+                    <button type="button" class="btn btn-success">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
                     <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"
                             data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="visually-hidden">Toggle Dropdown</span>
@@ -30,6 +41,7 @@
                                 New books
                             </a>
                         </li>
+
                         <li>
                             <a class="dropdown-item"
                                href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/viewAll/allRecentBooks.jsp">
@@ -37,6 +49,7 @@
                                 Recent Books
                             </a>
                         </li>
+
                         <li>
                             <a class="dropdown-item"
                                href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/viewAll/allOldBooks.jsp">
@@ -51,29 +64,56 @@
 
             <c:if test="${not empty userModelObj}">
                 <div class="btn-group" role="group">
+
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <i class="fa-solid fa-right-from-bracket pe-1"></i>${userModelObj.name}
+                        <i class="fa-solid fa-right-from-bracket pe-1"></i>
+                            ${userModelObj.name}
                     </button>
+
+                    <a class="btn btn-secondary" href="${pageContext.request.contextPath}/cart.jsp" role="button">
+                        <i class="fa-solid fa-cart-shopping pe-1"></i>
+                        Cart Shopping
+                    </a>
+
                     <div class="btn-group" role="group">
+
                         <button type="button" class="btn btn-primary dropdown-toggle px-3" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                            <i class="fa-solid fa-filter p-1"></i>More Options
+                            <i class="fa-solid fa-filter p-1"></i>
+                            More Options
                         </button>
+
                         <ul class="dropdown-menu" style="width: 100%;">
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear p-2"></i>Settings</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-phone p-2"></i>Contact Us</a>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa-solid fa-gear p-2"></i>
+                                    Settings
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="fa-solid fa-phone p-2"></i>
+                                    Contact Us
+                                </a>
                                 <c:choose>
                                 <c:when test="${userModelObj.rolers.contains('USER')}">
-                            <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/auth/user/userHome.jsp"><i
-                                    class="fa-solid fa-house-user p-2"></i>Back
-                                Home</a>
+                            <li>
+                                <a class="dropdown-item"
+                                   href="${pageContext.request.contextPath}/auth/user/userHome.jsp">
+                                    <i class="fa-solid fa-house-user p-2"></i>
+                                    Back Home
+                                </a>
                             </li>
+
                             </c:when>
                             <c:when test="${userModelObj.rolers.contains('ADMIN')}">
-                                <li><a class="dropdown-item"
-                                       href="${pageContext.request.contextPath}/auth/admin/admHome.jsp"><i
-                                        class="fa-solid fa-screwdriver-wrench p-2"></i>Control panel</a></li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       href="${pageContext.request.contextPath}/auth/admin/admHome.jsp">
+                                        <i class="fa-solid fa-screwdriver-wrench p-2"></i>
+                                        Control panel
+                                    </a>
+                                </li>
                             </c:when>
                             </c:choose>
                         </ul>
@@ -100,6 +140,7 @@
                     </div>
                 </div>
             </c:if>
+
         </div>
     </nav>
 
@@ -126,6 +167,7 @@
             </div>
         </div>
     </div>
+
 </header>
 
 </body>

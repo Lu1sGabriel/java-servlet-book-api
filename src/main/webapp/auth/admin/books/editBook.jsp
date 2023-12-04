@@ -1,6 +1,8 @@
 <%@ page import="admin.book.DAO.BookDAOImplementation" %>
 <%@ page import="admin.book.model.Book" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,6 +39,18 @@
                             <div class="col-12">
                                 <div class="mb-4">
                                     <h3>Book Edition</h3>
+
+                                    <c:if test="${not empty failMessage }">
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <i class="fa-solid fa-triangle-exclamation pe-2"></i>
+                                            <strong class="pe-1">Holy guacamole!</strong>
+                                                ${failMessage}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                            <c:remove var="failMessage" scope="session"/>
+                                        </div>
+                                    </c:if>
+
                                 </div>
                             </div>
                         </div>
@@ -69,7 +83,7 @@
                                 <div class="col-3">
                                     <div class="form-floating mb-3">
                                         <input type="number" class="form-control" name="price" id="price" placeholder=""
-                                               required onwheel="this.blur()" value="<%=book.getPrice()%>">
+                                               required onwheel="this.blur()" value="<%=book.getPrice()%>" step="0.01">
                                         <label for="price" class="form-label"><i
                                                 class="fa-regular fa-money-bill-1 pe-3"></i>Price</label>
                                     </div>
@@ -103,7 +117,7 @@
     </div>
 </section>
 
-<%@include file="../../../resources/allComponent/footer/footer.jsp"%>
+<%@include file="../../../resources/allComponent/footer/footer.jsp" %>
 
 </body>
 </html>

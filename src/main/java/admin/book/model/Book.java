@@ -1,10 +1,12 @@
 package admin.book.model;
 
+import java.math.BigDecimal;
+
 public class Book {
     private int bookId;
     private String bookName;
     private String author;
-    private String price;
+    private BigDecimal price;
     private String bookCategory;
     private String status;
     private String photo;
@@ -13,7 +15,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(String bookName, String author, String price, String bookCategory, String status, String photo, String email) {
+    public Book(String bookName, String author, BigDecimal price, String bookCategory, String status, String photo, String email) {
         this.bookName = bookName;
         this.author = author;
         this.price = price;
@@ -47,11 +49,11 @@ public class Book {
         this.author = author;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

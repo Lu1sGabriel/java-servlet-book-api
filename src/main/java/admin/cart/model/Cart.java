@@ -1,24 +1,27 @@
-package admin.book.model;
+package admin.cart.model;
 
+import admin.book.model.Book;
 import user.model.User;
 
+import java.math.BigDecimal;
+
 public class Cart {
-    private int carId;
+    private int cartId;
     private Book bookModel;
     private User userModel;
     private String bookName;
     private String author;
-    private String price;
+    private BigDecimal price;
 
     public Cart() {
     }
 
-    public int getCarId() {
-        return carId;
+    public int getCartId() {
+        return cartId;
     }
 
-    public void setCarId(int carId) {
-        this.carId = carId;
+    public void setCartId(int cartId) {
+        this.cartId = cartId;
     }
 
     public Book getBookModel() {
@@ -53,11 +56,11 @@ public class Cart {
         this.author = author;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 }

@@ -73,47 +73,53 @@
             </td>
             <td>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
-                    <a type="button" href="editBook.jsp?id=<%=bookModel.getBookId()%>" class="btn btn-primary"><i
-                            class="fa-solid fa-pen-to-square pe-2"></i>Edit</a>
-                    <a type="button" onclick="deleteBook(<%=bookModel.getBookId()%>)" class="btn btn-danger"><i
-                            class="fa-solid fa-trash pe-2"></i>Delete</a>
+                    <a type="button" href="editBook.jsp?id=<%=bookModel.getBookId()%>" class="btn btn-primary">
+                        <i class="fa-solid fa-pen-to-square pe-2"></i>
+                        Edit
+                    </a>
+                    <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <i class="fa-solid fa-trash pe-2"></i>
+                        Delete
+                    </a>
                 </div>
             </td>
         </tr>
+
+        </tbody>
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete book</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this book? If you delete it, all books in the shopping cart will
+                        also be deleted.
+                    </div>
+                    <div class="modal-footer">
+                        <form action="${pageContext.request.contextPath}/books?action=deleted&bookId=<%=bookModel.getBookId()%>"
+                              method="post">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <%
             }
         %>
-        </tbody>
     </table>
+
 </div>
 
-<%@include file="../../../resources/allComponent/footer/footer.jsp"%>
-
-<script>
-    function deleteBook(bookId) {
-        const xhr = new XMLHttpRequest();
-        const url = "${pageContext.request.contextPath}/books?action=DELETED&bookId=" + bookId;
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-
-                if (response.success) {
-                    alert("Success: " + response.message);
-                    // Recarregar a página após a exclusão bem-sucedida
-                    location.reload();
-                } else {
-                    alert("Error: " + response.message);
-                    // ou exiba a mensagem de erro de alguma outra maneira
-                }
-            }
-        };
-
-        xhr.send();
-    }
-</script>
+<%@include file="../../../resources/allComponent/footer/footer.jsp" %>
 
 </body>
 </html>

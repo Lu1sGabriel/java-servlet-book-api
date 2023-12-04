@@ -60,7 +60,7 @@
                 </div>
             </form>
 
-            <div class="btn-group" role="group">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
 
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                         data-bs-target="#exampleModal">

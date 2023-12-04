@@ -62,9 +62,20 @@ public class UserServlet extends HttpServlet {
         HttpSession httpSession = request.getSession();
         if (request.getParameter("check") != null) {
             try {
-                String encryptedPassword = Cryptography.convertToMD5(request.getParameter("password"));
-                User userModel = new User(request.getParameter("fname"), request.getParameter("email"),
-                        request.getParameter("phno"), encryptedPassword);
+                String fname = request.getParameter("fname");
+                String email = request.getParameter("email");
+                String phno = request.getParameter("phno");
+                String password = request.getParameter("password");
+
+                // Verifica se os campos estão vazios
+                if (fname == null || fname.isEmpty() || email == null || email.isEmpty() || phno == null || phno.isEmpty() || password == null || password.isEmpty()) {
+                    httpSession.setAttribute("failMessage", "All fields must be filled");
+                    response.sendRedirect("register.jsp");
+                    return;
+                }
+
+                String encryptedPassword = Cryptography.convertToMD5(password);
+                User userModel = new User(fname, email, phno, encryptedPassword);
                 User isRegistered = userDAO.userRegister(userModel);
                 if (isRegistered != null) {
                     Roler roler;
@@ -89,6 +100,19 @@ public class UserServlet extends HttpServlet {
     private void login(HttpServletRequest request, HttpServletResponse response) {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+
+        // Verifica se os campos estão vazios
+        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("failedMsg", "Todos os campos devem ser preenchidos.");
+            try {
+                response.sendRedirect("login.jsp");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return;
+        }
+
         User user;
         String path = "login.jsp"; // Define o caminho padrão para a página de login
 

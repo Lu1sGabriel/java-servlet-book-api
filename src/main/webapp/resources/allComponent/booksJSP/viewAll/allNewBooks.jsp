@@ -2,6 +2,10 @@
 <%@ page import="admin.book.DAO.BookDAOImplementation" %>
 <%@ page import="admin.book.model.Book" %>
 <%@ page import="java.util.List" %>
+<%@ page import="user.model.UserDetails" %>
+<%
+    UserDetails userAllNewBooks = (UserDetails) session.getAttribute("userModelObj");
+%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -54,11 +58,12 @@
                         <div class="card-footer bg-transparent border-success">
                             <div class="btn-group btn-group-sm" role="group"
                                  aria-label="Small button group" style="width: 100%;">
-                                <a href="" class="btn btn-outline-danger">
+                                <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=allNewBooksModel.getBookId()%>&user=<%=userAllNewBooks.getUser().getEmail()%>"
+                                   class="btn btn-outline-danger">
                                     <i class="fa-solid fa-cart-plus px-1"></i>
                                     Add
                                 </a>
-                                <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=allNewBooksModel.getBookId()%>"
+                                <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=allNewBooksModel.getBookId()%>&user=<%=userAllNewBooks.getUser().getEmail()%>"
                                    class="btn btn-outline-success">
                                     <i class="fa-solid fa-circle-info px-1"></i>
                                     Details

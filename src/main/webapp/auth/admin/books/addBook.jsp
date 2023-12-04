@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="form-floating mb-3">
-                                        <input type="number" class="form-control" name="price" id="price" placeholder=""
+                                        <input type="number" step="0.01" class="form-control" name="price" id="price" placeholder=""
                                                required onwheel="this.blur()">
                                         <label for="price" class="form-label"><i
                                                 class="fa-regular fa-money-bill-1 pe-3"></i>Price</label>
