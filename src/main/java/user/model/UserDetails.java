@@ -1,5 +1,7 @@
 package user.model;
 
+import admin.roler.model.Roler;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,10 +1,10 @@
 package user.servlet;
 
-import user.DAOS.RolerDAO;
-import user.DAOS.RolerDAOImplementation;
+import admin.roler.DAO.RolerDAO;
+import admin.roler.DAO.RolerDAOImplementation;
+import admin.roler.model.Roler;
 import user.DAOS.UserDAO;
 import user.DAOS.UserDAOImplementation;
-import user.model.Roler;
 import user.model.User;
 import user.model.UserDetails;
 import utils.Authorization;
@@ -22,7 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Map;
 
-@WebServlet(value = "/register")
+@WebServlet(value = "/user")
 public class UserServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -31,12 +31,16 @@ public class UserServlet extends HttpServlet {
 
     private enum Actions {
         REGISTER,
-        LOGIN
+        LOGIN,
+        EDIT,
+        DELETE
     }
 
     private final Map<Actions, ServletActions> actions = Map.of(
             Actions.REGISTER, this::register,
-            Actions.LOGIN, this::login
+            Actions.LOGIN, this::login,
+            Actions.EDIT, this::edit,
+            Actions.DELETE, this::delete
     );
 
     @Override
@@ -57,67 +61,69 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-
     private void register(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession httpSession = request.getSession();
-        if (request.getParameter("check") != null) {
-            try {
+        try {
+            if (request.getParameter("check") != null) {
                 String fname = request.getParameter("fname");
                 String email = request.getParameter("email");
                 String phno = request.getParameter("phno");
                 String password = request.getParameter("password");
 
                 // Verifica se os campos estão vazios
-                if (fname == null || fname.isEmpty() || email == null || email.isEmpty() || phno == null || phno.isEmpty() || password == null || password.isEmpty()) {
-                    httpSession.setAttribute("failMessage", "All fields must be filled");
-                    response.sendRedirect("register.jsp");
+                if (areFieldsEmpty(fname, email, phno, password)) {
+                    setSessionAttributeAndRedirect(request, response, false, "All fields must be filled.",
+                            "register.jsp");
+                    return;
+                }
+
+                if (isPasswordInvalid(password)) {
+                    setSessionAttributeAndRedirect(request, response, false, "The password must be at least 6 characters long.",
+                            "register.jsp");
+                    return;
+                }
+
+                if (isPhoneNumberInvalid(phno)) {
+                    setSessionAttributeAndRedirect(request, response, false, "The phone number must be exactly 11 digits long and contain only numbers.",
+                            "register.jsp");
+                    return;
+                }
+
+                // Verifica se o email e/ou número de celular já está registrado
+                if (isEmailOrPhoneNumberRegistered(email, phno)) {
+                    setSessionAttributeAndRedirect(request, response, false, "The email or phone number is already registered. Please try again with another ones.",
+                            "register.jsp");
                     return;
                 }
 
                 String encryptedPassword = Cryptography.convertToMD5(password);
                 User userModel = new User(fname, email, phno, encryptedPassword);
-                User isRegistered = userDAO.userRegister(userModel);
+                User isRegistered = userDAO.register(userModel);
                 if (isRegistered != null) {
-                    Roler roler;
-                    roler = rolerDAO.searchRolerByType("USER");
-                    rolerDAO.assignRole(isRegistered, roler);
-                    httpSession.setAttribute("successMessage", "Registration created successfully!");
-                    response.sendRedirect("login.jsp");
+                    assignRoleToUser(isRegistered);
+                    setSessionAttributeAndRedirect(request, response, true, "Record created successfully!", "login.jsp");
                 } else {
-                    httpSession.setAttribute("failMessage", "An error occurred when trying to register");
-                    response.sendRedirect("register.jsp");
+                    setSessionAttributeAndRedirect(request, response, false, "An error occurred while trying to register.", "register.jsp");
                 }
-            } catch (NoSuchAlgorithmException | IOException | SQLException exception) {
-                throw new RuntimeException(exception.getMessage() + "\n" + exception.getCause());
+            } else {
+                setSessionAttributeAndRedirect(request, response, false, "Please accept the terms and conditions.", "register.jsp");
             }
-        } else {
-            httpSession.setAttribute("failMessage", "Please accept the terms and conditions.");
-            redirectToRegisterPage(response);
+        } catch (NoSuchAlgorithmException | IOException | SQLException exception) {
+            throw new RuntimeException(exception.getMessage() + "\n" + exception.getCause());
         }
     }
 
-
     private void login(HttpServletRequest request, HttpServletResponse response) {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        // Verifica se os campos estão vazios
-        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-            HttpSession httpSession = request.getSession();
-            httpSession.setAttribute("failedMsg", "Todos os campos devem ser preenchidos.");
-            try {
-                response.sendRedirect("login.jsp");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return;
-        }
-
-        User user;
-        String path = "login.jsp"; // Define o caminho padrão para a página de login
-
         try {
-            user = userDAO.findUserByLogin(email);
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+
+            // Verifica se os campos estão vazios
+            if (areFieldsEmpty(email, password)) {
+                setSessionAttributeAndRedirect(request, response, false, "All fields must be filled.", "login.jsp");
+                return;
+            }
+
+            User user = userDAO.findByLogin(email);
             if (user != null) {
                 if (Cryptography.compararSenha(password, user.getPassword())) {
                     UserDetails userDetails = new UserDetails(user);
@@ -125,36 +131,124 @@ public class UserServlet extends HttpServlet {
                     httpSession.setAttribute("usuarioLogado", userDetails);
                     httpSession.setAttribute("userModelObj", userDetails); // Adiciona o objeto UserDetails à sessão
                     Authorization authorization = new Authorization();
-                    path = authorization.indexProfile(userDetails); // Altera o caminho se o login for bem-sucedido
+                    String path = authorization.indexProfile(userDetails); // Altera o caminho se o login for bem-sucedido
                     if (userDetails.getRolers().contains("ADMIN")) {
                         httpSession.setAttribute("adminEmail", email); // Armazena o email do admin na sessão
                     }
+                    response.sendRedirect(path); // Redireciona para a página especificada
                 } else {
-                    HttpSession httpSession = request.getSession();
-                    httpSession.setAttribute("failedMsg", "Email and/or password invalid.");
+                    setSessionAttributeAndRedirect(request, response, false, "Email and/or password invalid.", "login.jsp");
                 }
             } else {
-                HttpSession httpSession = request.getSession();
-                httpSession.setAttribute("failedMsg", "We did not find any users with this registered email address.");
+                setSessionAttributeAndRedirect(request, response, false, "We did not find any users with this registered email address.", "login.jsp");
             }
-        } catch (SQLException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            response.sendRedirect(path); // Redireciona para a página especificada
-        } catch (IOException e) {
+        } catch (SQLException | NoSuchAlgorithmException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-
-    private void redirectToRegisterPage(HttpServletResponse response) {
+    private void edit(HttpServletRequest request, HttpServletResponse response) {
         try {
-            response.sendRedirect("register.jsp");
-        } catch (IOException ioException) {
-            throw new RuntimeException(ioException);
+            int id = Integer.parseInt(request.getParameter("userId"));
+            String name = request.getParameter("userName");
+            String email = request.getParameter("userMail");
+            String phoneNumber = request.getParameter("userPhoneNumber");
+
+            // Verifica se os campos estão vazios
+            if (areFieldsEmpty(name, email, phoneNumber)) {
+                setSessionAttributeAndRedirect(request, response, false, "All fields must be filled.",
+                        "./auth/admin/users/allUsers.jsp");
+                return;
+            }
+
+            //  Verifica se o número de celular tem exatemente 11 números e/ou contém letras.
+            if (isPhoneNumberInvalid(phoneNumber)) {
+                setSessionAttributeAndRedirect(request, response, false, "The phone number must be exactly 11 digits long and contain only numbers.",
+                        "./auth/admin/users/allUsers.jsp");
+                return;
+            }
+
+            // Verifica se o email já está registrado e não pertence ao usuário atual
+            if (isEmailRegisteredAndNotBelongToUser(id, email)) {
+                setSessionAttributeAndRedirect(request, response, false, "The email is already registered. Please try again with another one.",
+                        "./auth/admin/users/allUsers.jsp");
+                return;
+            }
+
+            // Verifica se o número de celular já está registrado e não pertence ao usuário atual
+            if (isPhoneNumberRegisteredAndNotBelongToUser(id, phoneNumber)) {
+                setSessionAttributeAndRedirect(request, response, false, "The phone number is already registered. Please try again with another one.",
+                        "./auth/admin/users/allUsers.jsp");
+                return;
+            }
+
+            User userModel = new User();
+            userModel.setId(id);
+            userModel.setName(name);
+            userModel.setEmail(email);
+            userModel.setPhno(phoneNumber);
+
+            boolean wasEdited = userDAO.edition(userModel);
+            if (wasEdited) {
+                setSessionAttributeAndRedirect(request, response,
+                        true, "User edited successfully!",
+                        "./auth/admin/users/allUsers.jsp");
+
+            } else {
+                setSessionAttributeAndRedirect(request, response,
+                        false, "There was a problem editing the user.",
+                        "./auth/admin/users/allUsers.jsp");
+            }
+
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    private boolean areFieldsEmpty(String... fields) {
+        for (String field : fields) {
+            if (field == null || field.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isPasswordInvalid(String password) {
+        return password.length() <= 5;
+    }
+
+    private boolean isPhoneNumberInvalid(String phno) {
+        return phno.length() != 11 || !phno.matches("\\d+");
+    }
+
+    private boolean isEmailOrPhoneNumberRegistered(String email, String phno) throws SQLException {
+        return userDAO.isEmailRegistered(email) || userDAO.isPhoneNumberRegistered(phno);
+    }
+
+    private boolean isEmailRegisteredAndNotBelongToUser(int id, String email) throws SQLException {
+        return userDAO.isEmailRegistered(email) && !userDAO.doesEmailBelongToUser(id, email);
+    }
+
+    private boolean isPhoneNumberRegisteredAndNotBelongToUser(int id, String phoneNumber) throws SQLException {
+        return userDAO.isPhoneNumberRegistered(phoneNumber) && !userDAO.doesPhoneNumberBelongToUser(id, phoneNumber);
+    }
+
+    private void assignRoleToUser(User user) throws SQLException {
+        Roler roler = rolerDAO.searchRolerByType("USER");
+        rolerDAO.assignRole(user, roler);
+    }
+
+    private void setSessionAttributeAndRedirect(HttpServletRequest request, HttpServletResponse response, boolean isSuccess,
+                                                String message, String redirectPage) throws IOException {
+        HttpSession httpSession = request.getSession();
+        String attribute = isSuccess ? "successMessage" : "failMessage";
+        httpSession.setAttribute(attribute, message);
+        response.sendRedirect(redirectPage);
+    }
+
 
 }

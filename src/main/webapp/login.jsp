@@ -63,16 +63,16 @@
                                         </div>
                                     </c:if>
 
-                                    <c:if test="${not empty sessionScope.failedMsg}">
+                                    <c:if test="${not empty sessionScope.failMessage}">
                                         <div class="alert alert-danger alert-dismissible fade show"
                                              role="alert">
                                             <i class="fa-solid fa-triangle-exclamation pe-2"></i>
                                             <strong class="pe-1">Holy guacamole!</strong>
-                                                ${sessionScope.failedMsg}
+                                                ${sessionScope.failMessage}
                                             <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                     aria-label="Close"></button>
                                         </div>
-                                        <c:remove var="failedMsg" scope="session"/>
+                                        <c:remove var="failMessage" scope="session"/>
                                     </c:if>
 
                                     <c:if test="${not empty logoutMessage }">
@@ -92,7 +92,7 @@
                         </div>
 
                         <%--    Início forms    --%>
-                        <form action="${pageContext.request.contextPath}/register?action=login"
+                        <form action="${pageContext.request.contextPath}/user?action=login"
                               method="post" accept-charset="UTF-8">
                             <div class="row gy-3 overflow-hidden">
                                 <div class="col-12">

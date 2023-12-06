@@ -2,6 +2,10 @@
 <%@ page import="admin.book.DAO.BookDAOImplementation" %>
 <%@ page import="admin.book.model.Book" %>
 <%@ page import="java.util.List" %>
+<%@ page import="user.model.UserDetails" %>
+<%
+    UserDetails userAllRecentBooks = (UserDetails) session.getAttribute("userModelObj");
+%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -53,15 +57,24 @@
                         <div class="card-footer bg-transparent border-success">
                             <div class="btn-group btn-group-sm" role="group"
                                  aria-label="Small button group" style="width: 100%;">
-                                <a href="" class="btn btn-outline-danger">
+                                <% if (userAllRecentBooks != null) { %>
+                                <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=allRecentBooksModel.getBookId()%>&user=<%=userAllRecentBooks.getUser().getEmail()%>"
+                                   class="btn btn-outline-danger">
                                     <i class="fa-solid fa-cart-plus px-1"></i>
                                     Add
                                 </a>
+                                <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=allRecentBooksModel.getBookId()%>&user=<%=userAllRecentBooks.getUser().getEmail()%>"
+                                   class="btn btn-outline-success">
+                                    <i class="fa-solid fa-circle-info px-1"></i>
+                                    Details
+                                </a>
+                                <% } else { %>
                                 <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=allRecentBooksModel.getBookId()%>"
                                    class="btn btn-outline-success">
                                     <i class="fa-solid fa-circle-info px-1"></i>
                                     Details
                                 </a>
+                                <% } %>
                                 <a class="btn btn-outline-primary">
                                     <i class="fa-solid fa-brazilian-real-sign px-1"></i>
                                     <%=allRecentBooksModel.getPrice()%>
@@ -75,6 +88,8 @@
         <% } %>
 
     </div>
+
+
 </div>
 
 <%--    Início Footer   --%>

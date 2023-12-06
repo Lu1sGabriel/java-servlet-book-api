@@ -1,5 +1,7 @@
 package user.model;
 
+import admin.roler.model.Roler;
+
 import java.util.List;
 
 public class User {
@@ -8,11 +10,6 @@ public class User {
     private String email;
     private String phno;
     private String password;
-    private String adress;
-    private String landmark;
-    private String city;
-    private String state;
-    private String pincode;
     private List<Roler> rolerList;
 
     public User() {
@@ -72,46 +69,6 @@ public class User {
         this.password = password;
     }
 
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
-        this.adress = adress;
-    }
-
-    public String getLandmark() {
-        return landmark;
-    }
-
-    public void setLandmark(String landmark) {
-        this.landmark = landmark;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(String pincode) {
-        this.pincode = pincode;
-    }
-
     public List<Roler> getRolerList() {
         return rolerList;
     }
@@ -128,12 +85,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phno='" + phno + '\'' +
                 ", password='" + password + '\'' +
-                ", adress='" + adress + '\'' +
-                ", landmark='" + landmark + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", pincode='" + pincode + '\'' +
-                ", rolerList=" + rolerList +
                 '}';
     }
 }

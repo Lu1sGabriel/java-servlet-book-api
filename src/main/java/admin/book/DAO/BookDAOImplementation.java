@@ -9,15 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookDAOImplementation extends AbstractDAO implements BookDAO {
-    private static final String INSERT_SQL = "INSERT INTO public.book_dtls (bookName, author, price, bookCategory, status, photo, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL_BOOKS_SQL = "SELECT bookID, bookName, author, price, bookCategory, status, photo, email FROM public.book_dtls ORDER BY bookID";
-    private static final String SELECT_BOOK_BY_ID_SQL = "SELECT bookID, bookName, author, price, bookCategory, status, photo, email FROM public.book_dtls WHERE bookID = ?";
-    private static final String SELECT_NEW_BOOKS_SQL = "SELECT * FROM public.book_dtls WHERE bookCategory = ? and status = ? ORDER BY bookID DESC";
-    private static final String SELECT_RECENT_BOOKS_SQL = "SELECT * FROM public.book_dtls WHERE status = ? ORDER BY bookID DESC";
-    private static final String SELECT_OLD_BOOKS_SQL = "SELECT * FROM public.book_dtls WHERE bookCategory = ? and status=? ORDER BY bookID DESC";
-    private static final String SELECT_ALL_RECENT_BOOKS_SQL = "SELECT * FROM public.book_dtls WHERE status = ? ORDER BY bookID DESC";
-    private static final String UPDATE_SQL = "UPDATE public.book_dtls SET bookName = ?, author = ?, price = ?, status = ? WHERE bookID = ?";
-    private static final String DELETE_SQL = "DELETE FROM public.book_dtls WHERE bookID = ?";
+    private static final String INSERT_SQL = "INSERT INTO \"ebook-app\".book_dtls (bookName, author, price, bookCategory, status, photo, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL_BOOKS_SQL = "SELECT bookID, bookName, author, price, bookCategory, status, photo, email FROM \"ebook-app\".book_dtls ORDER BY bookID";
+    private static final String SELECT_BOOK_BY_ID_SQL = "SELECT bookID, bookName, author, price, bookCategory, status, photo, email FROM \"ebook-app\".book_dtls WHERE bookID = ?";
+    private static final String SELECT_NEW_BOOKS_SQL = "SELECT * FROM \"ebook-app\".book_dtls WHERE bookCategory = ? and status = ? ORDER BY bookID DESC";
+    private static final String SELECT_RECENT_BOOKS_SQL = "SELECT * FROM \"ebook-app\".book_dtls WHERE status = ? ORDER BY bookID DESC";
+    private static final String SELECT_OLD_BOOKS_SQL = "SELECT * FROM \"ebook-app\".book_dtls WHERE bookCategory = ? and status=? ORDER BY bookID DESC";
+    private static final String SELECT_ALL_NEW_BOOKS_SQL = "SELECT * FROM \"ebook-app\".book_dtls WHERE bookCategory=? ORDER BY bookID DESC";
+    private static final String SELECT_ALL_OLD_BOOKS_SQL = "SELECT * FROM \"ebook-app\".book_dtls WHERE bookCategory=? ORDER BY bookID DESC";
+    private static final String SELECT_ALL_RECENT_BOOKS_SQL = "SELECT * FROM \"ebook-app\".book_dtls WHERE status = ? ORDER BY bookID DESC";
+    private static final String UPDATE_SQL = "UPDATE \"ebook-app\".book_dtls SET bookName = ?, author = ?, price = ?, status = ? WHERE bookID = ?";
+    private static final String DELETE_SQL = "DELETE FROM \"ebook-app\".book_dtls WHERE bookID = ?";
 
     @Override
     public boolean addBook(Book bookModel) throws SQLException {
@@ -116,9 +118,8 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
 
     @Override
     public List<Book> getAllNewBooks() {
-        final String getAllSQL = "SELECT * FROM public.book_dtls WHERE bookCategory=? ORDER BY bookID DESC";
         try {
-            return executeQuery(getAllSQL, preparedStatement -> {
+            return executeQuery(SELECT_ALL_NEW_BOOKS_SQL, preparedStatement -> {
                 preparedStatement.setString(1, "New Book");
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     List<Book> bookList = new ArrayList<>();
@@ -153,9 +154,8 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
 
     @Override
     public List<Book> getAllOldBooks() {
-        final String getAllOldBooksSQL = "SELECT * FROM public.book_dtls WHERE bookCategory=? ORDER BY bookID DESC";
         try {
-            return executeQuery(getAllOldBooksSQL, preparedStatement -> {
+            return executeQuery(SELECT_ALL_OLD_BOOKS_SQL, preparedStatement -> {
                 preparedStatement.setString(1, "Old Book");
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     List<Book> bookList = new ArrayList<>();

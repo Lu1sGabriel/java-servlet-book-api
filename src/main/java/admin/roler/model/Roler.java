@@ -1,4 +1,6 @@
-package user.model;
+package admin.roler.model;
+
+import user.model.User;
 
 import java.util.List;
 

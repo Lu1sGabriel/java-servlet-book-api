@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartDAOImplementation extends AbstractDAO implements CartDAO {
-    private static final String INSERT_SQL = "INSERT INTO public.cart (bookIdFK, userIdFk, book_name, author, price) VALUES (?, ?, ?, ?, ?)";
-    private static final String GET_SQL = "SELECT c.cartId, c.bookIdFK, c.userIdFk, b.bookName, b.photo, b.price FROM public.cart c JOIN public.book_dtls b ON c.bookIdFK = b.bookID WHERE c.userIdFk = ?";
-    private static final String DELETE_SQL = "DELETE FROM public.cart WHERE cartId = ? AND userIdFk = ?";
-    private static final String SELECT_SQL = "SELECT c.*, b.bookName, b.photo FROM public.cart c JOIN public.book_dtls b ON c.bookIdFK = b.bookID WHERE c.cartid = ?";
+    private static final String INSERT_SQL = "INSERT INTO \"ebook-app\".cart (bookIdFK, userIdFk, book_name, author, price) VALUES (?, ?, ?, ?, ?)";
+    private static final String GET_SQL = "SELECT c.cartId, c.bookIdFK, c.userIdFk, b.bookName, b.photo, b.price FROM \"ebook-app\".cart c JOIN \"ebook-app\".book_dtls b ON c.bookIdFK = b.bookID WHERE c.userIdFk = ?";
+    private static final String DELETE_SQL = "DELETE FROM \"ebook-app\".cart WHERE cartId = ? AND userIdFk = ?";
+    private static final String SELECT_SQL = "SELECT c.*, b.bookName, b.photo FROM \"ebook-app\".cart c JOIN \"ebook-app\".book_dtls b ON c.bookIdFK = b.bookID WHERE c.cartid = ?";
 
     @Override
     public boolean insertProduct(Book bookModel, User userModel) {

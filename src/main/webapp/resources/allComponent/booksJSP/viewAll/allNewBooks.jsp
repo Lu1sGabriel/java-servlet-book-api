@@ -58,6 +58,7 @@
                         <div class="card-footer bg-transparent border-success">
                             <div class="btn-group btn-group-sm" role="group"
                                  aria-label="Small button group" style="width: 100%;">
+                                <% if (userAllNewBooks != null) { %>
                                 <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=allNewBooksModel.getBookId()%>&user=<%=userAllNewBooks.getUser().getEmail()%>"
                                    class="btn btn-outline-danger">
                                     <i class="fa-solid fa-cart-plus px-1"></i>
@@ -68,7 +69,14 @@
                                     <i class="fa-solid fa-circle-info px-1"></i>
                                     Details
                                 </a>
-                                <a class="btn btn-outline-primary">
+                                <% } else { %>
+                                <a href="${pageContext.request.contextPath}/resources/allComponent/booksJSP/details/bookDetail.jsp?bookId=<%=allNewBooksModel.getBookId()%>"
+                                   class="btn btn-outline-success">
+                                    <i class="fa-solid fa-circle-info px-1"></i>
+                                    Details
+                                </a>
+                                <% } %>
+                                <a class="btn btn-outline-dark">
                                     <i class="fa-solid fa-brazilian-real-sign px-1"></i>
                                     <%=allNewBooksModel.getPrice()%>
                                 </a>
@@ -81,6 +89,8 @@
         <% } %>
 
     </div>
+
+
 </div>
 
 <%--    Início Footer   --%>

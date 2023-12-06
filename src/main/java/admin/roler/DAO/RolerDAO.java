@@ -1,6 +1,6 @@
-package user.DAOS;
+package admin.roler.DAO;
 
-import user.model.Roler;
+import admin.roler.model.Roler;
 import user.model.User;
 
 import java.sql.SQLException;

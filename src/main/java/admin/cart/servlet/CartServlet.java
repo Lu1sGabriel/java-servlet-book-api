@@ -61,7 +61,7 @@ public class CartServlet extends HttpServlet {
     private void addCart(HttpServletRequest request, HttpServletResponse response) {
         try {
             Book bookModel = bookDAO.getBookById(Integer.parseInt(request.getParameter("book")));
-            User userModel = userDAO.findUserByLogin(request.getParameter("user"));
+            User userModel = userDAO.findByLogin(request.getParameter("user"));
             boolean hasBeenInserted = cartDAO.insertProduct(bookModel, userModel);
             setSessionAttributeAndRedirect(request, response, hasBeenInserted, "The book has been successfully added to the cart!",
                     "The book was not added to the cart.", "index.jsp");
@@ -74,7 +74,7 @@ public class CartServlet extends HttpServlet {
     private void deleteFromCart(HttpServletRequest request, HttpServletResponse response) {
         try {
             Cart cartModel = cartDAO.getCartById(Integer.parseInt(request.getParameter("cartId")));
-            User userModel = userDAO.findUserByLogin(request.getParameter("userObj"));
+            User userModel = userDAO.findByLogin(request.getParameter("userObj"));
             boolean hasBeenDeleted = cartDAO.deleteFromCart(cartModel, userModel);
             setSessionAttributeAndRedirect(request, response, hasBeenDeleted, "The book has been successfully deleted from the cart!",
                     "The book was not deleted from the cart.", "cart.jsp");

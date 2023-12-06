@@ -1,62 +1,63 @@
+CREATE SCHEMA "ebook-app";
+
 -- Tabela do usuário.
 
-CREATE TABLE "user"
+CREATE TABLE "ebook-app".user
 (
     userId   BIGSERIAL,
     name     VARCHAR(100) NOT NULL,
     email    VARCHAR      NOT NULL UNIQUE,
     phno     VARCHAR(11)  NOT NULL,
     password VARCHAR      NOT NULL,
-    adress   VARCHAR(45),
-    landmark VARCHAR(45),
-    city     VARCHAR(45),
-    state    VARCHAR(45),
-    pincode  VARCHAR(11),
     CONSTRAINT userKey PRIMARY KEY (userId)
 );
 
 SELECT *
-FROM public.user;
+FROM "ebook-app".user;
 
 -- Tabela papel.
 
-CREATE TABLE "roler"
+CREATE TABLE "ebook-app".roler
 (
     rolerId  BIGSERIAL,
     roleType VARCHAR(5),
     CONSTRAINT roler_key PRIMARY KEY (rolerId)
 );
 
-INSERT INTO public.roler (roleType)
+INSERT INTO "ebook-app".roler (roleType)
 VALUES ('ADMIN');
 
-INSERT INTO public.roler (roleType)
+INSERT INTO "ebook-app".roler (roleType)
 VALUES ('USER');
 
 SELECT *
-FROM public.roler;
+FROM "ebook-app".roler;
 
 SELECT rolerId, roleType
-FROM public.roler
+FROM "ebook-app".roler
 WHERE roleType = 'USER';
 
 -- Tabela papel usuário.
-CREATE TABLE "user_roler"
+CREATE TABLE "ebook-app".user_roler
 (
     userIdFk  BIGINT NOT NULL,
     rolerIdFk BIGINT NOT NULL,
     CONSTRAINT fk_user_userId FOREIGN KEY (userIdFk)
-        REFERENCES public."user" (userId) ON DELETE CASCADE,
+        REFERENCES "ebook-app".user (userId) ON DELETE CASCADE,
     CONSTRAINT fk_roler_rolerID FOREIGN KEY (rolerIdFk)
-        REFERENCES public.roler (rolerId) ON DELETE CASCADE
+        REFERENCES "ebook-app".roler (rolerId) ON DELETE CASCADE
 );
 
 SELECT *
-FROM public.user_roler;
+FROM "ebook-app".user_roler;
+
+INSERT INTO "ebook-app".user_roler (userIdFk, rolerIdFk)
+VALUES (1, 1);
+
 
 -- Tabela dos livros.
 
-CREATE TABLE "book_dtls"
+CREATE TABLE "ebook-app".book_dtls
 (
     bookID       BIGSERIAL,
     bookName     VARCHAR      NOT NULL,
@@ -69,30 +70,22 @@ CREATE TABLE "book_dtls"
     CONSTRAINT book_key PRIMARY KEY (bookID)
 );
 
-
-ALTER TABLE book_dtls
+ALTER TABLE "ebook-app".book_dtls
     ALTER COLUMN price TYPE NUMERIC(5, 2) USING price::numeric(5, 2);
 
 SELECT *
-FROM public.book_dtls;
+FROM "ebook-app".book_dtls;
 
-SELECT *
-FROM public.book_dtls
-WHERE bookid = 7;
-
-ALTER TABLE book_dtls
+ALTER TABLE "ebook-app".book_dtls
     ALTER COLUMN status TYPE VARCHAR(15);
 
-ALTER TABLE book_dtls
+ALTER TABLE "ebook-app".book_dtls
     ALTER COLUMN bookCategory TYPE VARCHAR(15);
 
--- Vendo o enconding do banco.
-SELECT datname, pg_encoding_to_char(encoding)
-FROM pg_database;
 
 -- Tabela carrinho de compras:
 
-CREATE TABLE "cart"
+CREATE TABLE "ebook-app".cart
 (
     cartId    BIGSERIAL,
     bookIdFK  BIGINT  NOT NULL,
@@ -101,18 +94,14 @@ CREATE TABLE "cart"
     author    VARCHAR NOT NULL,
     price     VARCHAR NOT NULL,
     CONSTRAINT cart_id PRIMARY KEY (cartId),
-    CONSTRAINT fk_book_bookId FOREIGN KEY (bookIdFK) REFERENCES public.book_dtls (bookid) ON DELETE CASCADE,
-    CONSTRAINT fk_user_userId FOREIGN KEY (userIdFk) REFERENCES public."user" (userid) ON DELETE CASCADE
+    CONSTRAINT fk_book_bookId FOREIGN KEY (bookIdFK) REFERENCES "ebook-app".book_dtls (bookid) ON DELETE CASCADE,
+    CONSTRAINT fk_user_userId FOREIGN KEY (userIdFk) REFERENCES "ebook-app".user (userid) ON DELETE CASCADE
 );
 
-ALTER TABLE cart
+ALTER TABLE "ebook-app".cart
     ALTER COLUMN price TYPE NUMERIC(5, 2) USING price::numeric(5, 2);
 
 
-SELECT *
-FROM public.cart where bookIdFK = 2 ;
-
-SELECT *
-FROM public.cart
-WHERE useridfk = 3;
-
+-- Vendo o enconding do banco.
+SELECT datname, pg_encoding_to_char(encoding)
+FROM pg_database;

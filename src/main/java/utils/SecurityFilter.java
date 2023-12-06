@@ -27,21 +27,29 @@ public class SecurityFilter extends HttpFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         String path = req.getRequestURI();
-        HttpSession session = req.getSession();
+        HttpSession session = req.getSession(false); // Obtenha a sessão atual sem criar uma nova
 
-        UserDetails userDetails = (UserDetails) session.getAttribute("usuarioLogado");
+        if (session != null) {
+            UserDetails userDetails = (UserDetails) session.getAttribute("usuarioLogado");
 
-        Authorization authorization = new Authorization();
+            Authorization authorization = new Authorization();
 
-        boolean authorized = authorization.hasAuthorization(userDetails, path);
-        if (authorized) {
-            chain.doFilter(request, response);
+            boolean authorized = authorization.hasAuthorization(userDetails, path);
+            if (authorized) {
+                chain.doFilter(request, response);
+            } else {
+                String pth = req.getContextPath() + ACCESS_DENIED_PATH;
+                HttpServletResponse resp = (HttpServletResponse) response;
+                resp.sendRedirect(pth);
+            }
         } else {
-            String pth = req.getContextPath() + ACCESS_DENIED_PATH;
+            String loginPath = req.getContextPath() + "/login.jsp";
             HttpServletResponse resp = (HttpServletResponse) response;
-            resp.sendRedirect(pth);
+            resp.sendRedirect(loginPath);
+
         }
     }
+
 
     public void init(FilterConfig fConfig) {
     }
