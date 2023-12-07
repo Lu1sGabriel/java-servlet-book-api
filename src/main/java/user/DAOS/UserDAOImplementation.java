@@ -5,6 +5,7 @@ import admin.roler.model.Roler;
 import user.model.User;
 import utils.AbstractDAO;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 public class UserDAOImplementation extends AbstractDAO implements UserDAO {
     private static final String INSERT_SQL = "INSERT INTO \"ebook-app\".user (name, email, phno, password) VALUES (?, ?, ?, ?) RETURNING userId";
     private static final String UPDATE_SQL = "UPDATE \"ebook-app\".user SET name = ?, email = ?, phno = ? WHERE userId = ?";
+    private static final String DELETE_SQL = "DELETE FROM \"ebook-app\".user WHERE userId = ?";
     private static final String SELECT_SQL = "SELECT userId, name, email, phno, password, adress, landmark, city, state, pincode FROM \"ebook-app\".user WHERE email=?";
     private static final String SEARCH_SQL = "SELECT * FROM \"ebook-app\".user WHERE email=?";
     private static final String SEARCH_ALL_USERS_SQL = "SELECT userId, name, email, phno FROM \"ebook-app\".user ORDER BY userId";
@@ -20,10 +22,11 @@ public class UserDAOImplementation extends AbstractDAO implements UserDAO {
     private static final String SEARCH_PHNO_SQL = "SELECT * FROM \"ebook-app\".user WHERE phno=?";
     private static final String CHECK_EMAIL_SQL = "SELECT * FROM \"ebook-app\".user WHERE userId = ? AND email = ?";
     private static final String CHECK_PHNO_SQL = "SELECT * FROM \"ebook-app\".user WHERE userId = ? AND phno = ?";
-
+    private static final String VIEW_SQL = "CREATE OR REPLACE VIEW \"ebook-app\".user_view AS SELECT userId, name, email, phno FROM \"ebook-app\".user";
+    private static final String SELECT_FROM_VIEW_SQL = "SELECT * FROM \"ebook-app\".user_view";
 
     @Override
-    public User register(User userModel) throws SQLException {
+    public User insert(User userModel) throws SQLException {
         return executeQueryWithParameters(statement -> {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -48,13 +51,22 @@ public class UserDAOImplementation extends AbstractDAO implements UserDAO {
     }
 
     @Override
-    public boolean edition(User user) throws SQLException {
+    public boolean edit(User user) throws SQLException {
         return executeQuery(UPDATE_SQL, preparedStatement -> {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getPhno());
             preparedStatement.setInt(4, user.getId());
             return preparedStatement.executeUpdate() == 1;
+        });
+    }
+
+    @Override
+    public boolean delete(User user) throws SQLException {
+        return executeQuery(DELETE_SQL, preparedStatement -> {
+            preparedStatement.setInt(1, user.getId());
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected == 1;
         });
     }
 
@@ -76,13 +88,14 @@ public class UserDAOImplementation extends AbstractDAO implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAll() throws SQLException {
         return executeQuery(SEARCH_ALL_USERS_SQL, preparedStatement -> {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<User> userList = new ArrayList<>();
                 while ((resultSet.next())) {
                     userList.add(mapToUserModelWithouPassword(resultSet));
                 }
+                createViewAndPrint();
                 return userList;
             }
         });
@@ -130,6 +143,29 @@ public class UserDAOImplementation extends AbstractDAO implements UserDAO {
         });
     }
 
+    private void createViewAndPrint() {
+        try {
+            // Cria a VIEW
+            executeUpdate(VIEW_SQL, PreparedStatement::executeUpdate);
+
+            // Imprime a VIEW
+            List<User> users = executeQuery(SELECT_FROM_VIEW_SQL, preparedStatement -> {
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    List<User> userList = new ArrayList<>();
+                    while (resultSet.next()) {
+                        userList.add(mapToUserModelWithouPassword(resultSet));
+                    }
+                    return userList;
+                }
+            });
+
+            for (User user : users) {
+                System.out.println("userId: " + user.getId() + ", name: " + user.getName() + ", email: " + user.getEmail() + ", phoneNumber: " + user.getPhno());
+            }
+        } catch (SQLException sqlex) {
+            throw new RuntimeException(sqlex);
+        }
+    }
 
     private User mapToUserModel(ResultSet resultSet) throws SQLException {
         User userModel = new User();

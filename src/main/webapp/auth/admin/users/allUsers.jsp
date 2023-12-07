@@ -2,9 +2,14 @@
 <%@ page import="user.DAOS.UserDAOImplementation" %>
 <%@ page import="user.DAOS.UserDAO" %>
 <%@ page import="user.model.User" %>
+<%@ page import="user.model.UserDetails" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page isELIgnored="false" %>
+<%
+    UserDetails loggedInUser = (UserDetails) session.getAttribute("userModelObj");
+    String loggedInEmail = loggedInUser.getUser().getEmail();
+%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -45,14 +50,15 @@
             <th scope="col"><i class="fa-solid fa-image pe-3"></i>Name</th>
             <th scope="col"><i class="fa-solid fa-signature pe-3"></i>Email</th>
             <th scope="col"><i class="fa-solid fa-file-signature pe-3"></i>Phone number</th>
-            <th scope="col"><i class="fa-solid fa-terminal pe-3"></i>Actions</th>
+            <th scope="col" class="text-end"><i class="fa-solid fa-terminal pe-3"></i>Actions</th>
         </tr>
         </thead>
         <tbody class="table-group-divider">
         <%
             UserDAO dao = new UserDAOImplementation();
-            List<User> userList = dao.getAllUsers();
+            List<User> userList = dao.getAll();
             for (User userModel : userList) {
+                if (!userModel.getEmail().equals(loggedInEmail)) {
         %>
         <tr class="text-start">
             <td>
@@ -67,13 +73,14 @@
             <td>
                 <%= userModel.getPhno() %>
             </td>
-            <td>
+            <td class="text-end">
                 <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
                     <a type="button" href="editUser.jsp?userMail=<%=userModel.getEmail()%>" class="btn btn-primary">
                         <i class="fa-solid fa-pen-to-square pe-2"></i>
                         Edit
                     </a>
-                    <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <a type="button" class="btn btn-danger" data-bs-toggle="modal"
+                       data-bs-target="#deleteUserModal<%=userModel.getId()%>">
                         <i class="fa-solid fa-trash pe-2"></i>
                         Delete
                     </a>
@@ -81,10 +88,8 @@
             </td>
         </tr>
 
-        </tbody>
-
-        <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        <div class="modal fade" id="deleteUserModal<%=userModel.getId()%>" data-bs-backdrop="static"
+             data-bs-keyboard="false" tabindex="-1"
              aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -93,11 +98,13 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this user?
+                        <h4>Are you sure that you want to deleted
+                            <span class="badge bg-secondary my-2"><%=userModel.getName()%> ?</span>
+                        </h4>
                         <div class="modal-footer">
-                            <form action="${pageContext.request.contextPath}/user?action=delete&bookId=<%=userModel.getId()%>"
+                            <form action="${pageContext.request.contextPath}/user?action=delete&userId=<%=userModel.getId()%>"
                                   method="post">
-                                <div class="btn-group" role="group" aria-label="Basic example">
+                                <div class="btn-group" role="group" aria-label="Basic example" style="width: 100%">
                                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </div>
@@ -109,9 +116,10 @@
         </div>
 
         <%
+                }
             }
         %>
-
+        </tbody>
     </table>
 
 </div>

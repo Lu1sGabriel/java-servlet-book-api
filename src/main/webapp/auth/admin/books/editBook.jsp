@@ -58,7 +58,7 @@
                         <%
                             int id = Integer.parseInt(request.getParameter("id"));
                             BookDAOImplementation dao = new BookDAOImplementation();
-                            Book book = dao.getBookById(id);
+                            Book book = dao.getById(id);
                         %>
 
                         <form action="${pageContext.request.contextPath}/books?action=edit&id=<%=book.getBookId()%>"

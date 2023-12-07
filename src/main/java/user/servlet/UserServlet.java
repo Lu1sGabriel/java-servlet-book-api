@@ -64,13 +64,13 @@ public class UserServlet extends HttpServlet {
     private void register(HttpServletRequest request, HttpServletResponse response) {
         try {
             if (request.getParameter("check") != null) {
-                String fname = request.getParameter("fname");
+                String fullName = request.getParameter("fname");
                 String email = request.getParameter("email");
-                String phno = request.getParameter("phno");
+                String phoneNumber = request.getParameter("phno");
                 String password = request.getParameter("password");
 
                 // Verifica se os campos estão vazios
-                if (areFieldsEmpty(fname, email, phno, password)) {
+                if (areFieldsEmpty(fullName, email, phoneNumber, password)) {
                     setSessionAttributeAndRedirect(request, response, false, "All fields must be filled.",
                             "register.jsp");
                     return;
@@ -82,22 +82,22 @@ public class UserServlet extends HttpServlet {
                     return;
                 }
 
-                if (isPhoneNumberInvalid(phno)) {
+                if (isPhoneNumberInvalid(phoneNumber)) {
                     setSessionAttributeAndRedirect(request, response, false, "The phone number must be exactly 11 digits long and contain only numbers.",
                             "register.jsp");
                     return;
                 }
 
                 // Verifica se o email e/ou número de celular já está registrado
-                if (isEmailOrPhoneNumberRegistered(email, phno)) {
+                if (isEmailOrPhoneNumberRegistered(email, phoneNumber)) {
                     setSessionAttributeAndRedirect(request, response, false, "The email or phone number is already registered. Please try again with another ones.",
                             "register.jsp");
                     return;
                 }
 
                 String encryptedPassword = Cryptography.convertToMD5(password);
-                User userModel = new User(fname, email, phno, encryptedPassword);
-                User isRegistered = userDAO.register(userModel);
+                User userModel = new User(fullName, email, phoneNumber, encryptedPassword);
+                User isRegistered = userDAO.insert(userModel);
                 if (isRegistered != null) {
                     assignRoleToUser(isRegistered);
                     setSessionAttributeAndRedirect(request, response, true, "Record created successfully!", "login.jsp");
@@ -188,24 +188,25 @@ public class UserServlet extends HttpServlet {
             userModel.setEmail(email);
             userModel.setPhno(phoneNumber);
 
-            boolean wasEdited = userDAO.edition(userModel);
-            if (wasEdited) {
-                setSessionAttributeAndRedirect(request, response,
-                        true, "User edited successfully!",
-                        "./auth/admin/users/allUsers.jsp");
+            boolean wasEdited = userDAO.edit(userModel);
+            setSessionAttributeAndRedirect(request, response, wasEdited, "User edited successfully!", "There was a problem editing the user.",
+                    "./auth/admin/users/allUsers.jsp");
 
-            } else {
-                setSessionAttributeAndRedirect(request, response,
-                        false, "There was a problem editing the user.",
-                        "./auth/admin/users/allUsers.jsp");
-            }
-
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | IOException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            User userModel = new User();
+            userModel.setId(Integer.parseInt(request.getParameter("userId")));
+            boolean hasBeenDeleted = userDAO.delete(userModel);
+            setSessionAttributeAndRedirect(request, response, hasBeenDeleted, "The user has been successfully deleted!", "The user has not been deleted.",
+                    "./auth/admin/users/allUsers.jsp");
+        } catch (SQLException | IOException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     private boolean areFieldsEmpty(String... fields) {
@@ -250,5 +251,11 @@ public class UserServlet extends HttpServlet {
         response.sendRedirect(redirectPage);
     }
 
+    private void setSessionAttributeAndRedirect(HttpServletRequest request, HttpServletResponse response, boolean condition,
+                                                String successMessage, String failMessage, String redirectPage) throws IOException {
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute(condition ? "successMessage" : "failMessage", condition ? successMessage : failMessage);
+        response.sendRedirect(redirectPage);
+    }
 
 }

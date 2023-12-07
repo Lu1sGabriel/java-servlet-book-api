@@ -45,9 +45,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="mb-4">
-                                    <h3>Sign in</h3>
+                                    <h2>Sign in</h2>
                                     <p>Don't have an account?
-                                        <a href="register.jsp" class="text-decoration-none ps-2">Sign up</a>
+                                        <a href="register.jsp" class="text-decoration-none ps-2 fs-6">Sign up</a>
                                     </p>
 
                                     <c:if test="${not empty successMessage }">

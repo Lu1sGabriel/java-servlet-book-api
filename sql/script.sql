@@ -51,10 +51,6 @@ CREATE TABLE "ebook-app".user_roler
 SELECT *
 FROM "ebook-app".user_roler;
 
-INSERT INTO "ebook-app".user_roler (userIdFk, rolerIdFk)
-VALUES (1, 1);
-
-
 -- Tabela dos livros.
 
 CREATE TABLE "ebook-app".book_dtls

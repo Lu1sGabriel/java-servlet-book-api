@@ -20,7 +20,7 @@ public class Authorization {
     public String indexProfile(UserDetails user) {
         return switch (user.getRolers().get(0)) {
             case "ADMIN" -> "auth/admin/admHome.jsp";
-            case "USER" -> "auth/user/userHome.jsp";
+            case "USER" -> "index.jsp";
             default -> "";
         };
     }

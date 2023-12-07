@@ -66,7 +66,8 @@
                             User userModel = dao.findByLogin(email);
                         %>
 
-                        <form action="${pageContext.request.contextPath}/user?action=edit&userId=<%=userModel.getId()%>"
+                        <form id="editUserForm"
+                              action="${pageContext.request.contextPath}/user?action=edit&userId=<%=userModel.getId()%>"
                               method="post" accept-charset="UTF-8">
                             <div class="row gy-3 overflow-hidden">
                                 <div class="col-6">
@@ -115,6 +116,38 @@
 </section>
 
 <%@include file="../../../resources/allComponent/footer/footer.jsp" %>
+
+
+<script>
+
+    // Adiciona o ouvinte de evento ao campo de entrada do telefone
+    document.getElementById('userPhoneNumber').addEventListener('input', function (e) {
+        const target = e.target;
+        let value = target.value.replace(/\D/g, '');
+
+        // Limita a entrada a 11 caracteres numéricos
+        value = value.slice(0, 11);
+
+        // Aplica a máscara
+        value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+        value = value.replace(/(\d)(\d{4})(\d{4})$/, '$1 $2-$3');
+
+        // Evita que o cursor pule para o final do input ao digitar no meio do valor
+        const position = target.selectionStart;
+        const diff = value.length - target.value.length;
+
+        target.value = value;
+        target.setSelectionRange(position + diff, position + diff);
+    });
+
+    // Adiciona o ouvinte de evento ao formulário
+    document.getElementById('editUserForm').addEventListener('submit', function () {
+        const phoneInput = document.getElementById('userPhoneNumber');
+        phoneInput.value = phoneInput.value.replace(/\D/g, '');
+    });
+
+</script>
+
 
 </body>
 </html>

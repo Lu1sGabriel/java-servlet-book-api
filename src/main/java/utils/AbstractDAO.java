@@ -42,9 +42,24 @@ public class AbstractDAO {
         }
     }
 
+    protected void executeUpdate(String sql, SqlConsumer<PreparedStatement> consumer) throws SQLException {
+        connect();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            consumer.accept(statement);
+        } finally {
+            disconnect();
+        }
+    }
+
     @FunctionalInterface
     public interface SqlFunction<T, R> {
         R apply(T t) throws SQLException;
     }
+
+    @FunctionalInterface
+    public interface SqlConsumer<T> {
+        void accept(T t) throws SQLException;
+    }
+
 
 }

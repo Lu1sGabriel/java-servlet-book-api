@@ -53,7 +53,7 @@
         <tbody class="table-group-divider">
         <%
             BookDAOImplementation dao = new BookDAOImplementation();
-            List<Book> bookList = dao.getAllBooks();
+            List<Book> bookList = dao.getAll();
             for (Book bookModel : bookList) {
         %>
         <tr class="text-start">

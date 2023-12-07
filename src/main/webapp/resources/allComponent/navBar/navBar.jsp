@@ -124,18 +124,32 @@
 
             <c:if test="${empty userModelObj }">
                 <div class="btn-group" role="group">
-                    <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-success"><i
-                            class="fa-solid fa-right-to-bracket p-1"></i>Login</a>
-                    <a href="${pageContext.request.contextPath}/register.jsp" class="btn btn-secondary"><i
-                            class="fa-solid fa-id-card p-1"></i>Register</a>
+                    <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-success">
+                        <i class="fa-solid fa-right-to-bracket p-1"></i>
+                        Login
+                    </a>
+                    <a href="${pageContext.request.contextPath}/register.jsp" class="btn btn-secondary">
+                        <i class="fa-solid fa-id-card p-1"></i>
+                        Register
+                    </a>
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-primary dropdown-toggle px-3" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                             <i class="fa-solid fa-filter p-1"></i>More Options
                         </button>
                         <ul class="dropdown-menu" style="width: 100%;">
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear p-2"></i>Settings</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-phone p-2"></i>Contact Us</a>
+                            <li>
+                                <a class="dropdown-item">
+                                    <i class="fa-solid fa-gear p-2"></i>
+                                    Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item">
+                                    <i class="fa-solid fa-phone p-2"></i>
+                                    Contact Us
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -161,7 +175,8 @@
                         I changed my mind
                     </button>
                     <a href="${pageContext.request.contextPath}/logout" type="button" class="btn btn-danger text white">
-                        <i class="fa-solid fa-right-from-bracket pe-2"></i>Log out
+                        <i class="fa-solid fa-right-from-bracket pe-2"></i>
+                        Log out
                     </a>
                 </div>
             </div>

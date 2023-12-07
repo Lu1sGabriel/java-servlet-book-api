@@ -6,15 +6,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface BookDAO {
-    boolean addBook(Book bookModel) throws SQLException;
+    boolean insert(Book bookModel) throws SQLException;
 
-    List<Book> getAllBooks() throws SQLException;
+    List<Book> getAll() throws SQLException;
 
-    Book getBookById(int id) throws SQLException;
+    Book getById(int id) throws SQLException;
 
-    boolean editBook(Book bookModel) throws SQLException;
+    boolean edit(Book bookModel) throws SQLException;
 
-    boolean deleteBook(int id) throws SQLException;
+    boolean delete(int id) throws SQLException;
 
     List<Book> getNewBooks();
 

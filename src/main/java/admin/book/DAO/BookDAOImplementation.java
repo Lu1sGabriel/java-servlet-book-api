@@ -22,14 +22,14 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     private static final String DELETE_SQL = "DELETE FROM \"ebook-app\".book_dtls WHERE bookID = ?";
 
     @Override
-    public boolean addBook(Book bookModel) throws SQLException {
+    public boolean insert(Book bookModel) throws SQLException {
         return executeQueryWithParameters(preparedStatement -> preparedStatement.executeUpdate() == 1,
                 INSERT_SQL, bookModel.getBookName(), bookModel.getAuthor(), bookModel.getPrice(), bookModel.getBookCategory(),
                 bookModel.getStatus(), bookModel.getPhoto(), bookModel.getEmail());
     }
 
     @Override
-    public List<Book> getAllBooks() throws SQLException {
+    public List<Book> getAll() throws SQLException {
         return executeQuery(SELECT_ALL_BOOKS_SQL, preparedStatement -> {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Book> bookList = new ArrayList<>();
@@ -42,7 +42,7 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     }
 
     @Override
-    public Book getBookById(int id) throws SQLException {
+    public Book getById(int id) throws SQLException {
         return executeQuery(SELECT_BOOK_BY_ID_SQL, preparedStatement -> {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -171,7 +171,7 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     }
 
     @Override
-    public boolean editBook(Book bookModel) throws SQLException {
+    public boolean edit(Book bookModel) throws SQLException {
         return executeQuery(UPDATE_SQL, preparedStatement -> {
             preparedStatement.setString(1, bookModel.getBookName());
             preparedStatement.setString(2, bookModel.getAuthor());
@@ -183,7 +183,7 @@ public class BookDAOImplementation extends AbstractDAO implements BookDAO {
     }
 
     @Override
-    public boolean deleteBook(int id) throws SQLException {
+    public boolean delete(int id) throws SQLException {
         return executeQuery(DELETE_SQL, preparedStatement -> {
             preparedStatement.setInt(1, id);
             int rowsAffected = preparedStatement.executeUpdate();

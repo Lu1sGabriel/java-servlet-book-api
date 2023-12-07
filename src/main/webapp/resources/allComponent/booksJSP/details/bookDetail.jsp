@@ -13,7 +13,7 @@
 <%
     int bookId = Integer.parseInt(request.getParameter("bookId"));
     BookDAOImplementation bookDetailDAO = new BookDAOImplementation();
-    Book detailBookModel = bookDetailDAO.getBookById(bookId);
+    Book detailBookModel = bookDetailDAO.getById(bookId);
     String userModelObj = request.getParameter("user");
 %>
 
@@ -107,7 +107,7 @@
                                             <h1 class="modal-title fs-5" id="staticBackdropLabel">
                                                 Would you like to add
                                                 <span class="badge bg-secondary"><%=detailBookModel.getBookName()%> </span>
-                                                to the shopping cart.
+                                                to the shopping cart ?
                                             </h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>

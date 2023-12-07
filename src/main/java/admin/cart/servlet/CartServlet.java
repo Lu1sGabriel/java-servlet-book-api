@@ -2,9 +2,9 @@ package admin.cart.servlet;
 
 import admin.book.DAO.BookDAO;
 import admin.book.DAO.BookDAOImplementation;
+import admin.book.model.Book;
 import admin.cart.DAO.CartDAO;
 import admin.cart.DAO.CartDAOImplementation;
-import admin.book.model.Book;
 import admin.cart.model.Cart;
 import user.DAOS.UserDAO;
 import user.DAOS.UserDAOImplementation;
@@ -60,15 +60,14 @@ public class CartServlet extends HttpServlet {
 
     private void addCart(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Book bookModel = bookDAO.getBookById(Integer.parseInt(request.getParameter("book")));
+            Book bookModel = bookDAO.getById(Integer.parseInt(request.getParameter("book")));
             User userModel = userDAO.findByLogin(request.getParameter("user"));
             boolean hasBeenInserted = cartDAO.insertProduct(bookModel, userModel);
             setSessionAttributeAndRedirect(request, response, hasBeenInserted, "The book has been successfully added to the cart!",
                     "The book was not added to the cart.", "index.jsp");
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | IOException exception) {
+            throw new RuntimeException(exception);
         }
-
     }
 
     private void deleteFromCart(HttpServletRequest request, HttpServletResponse response) {
@@ -78,8 +77,8 @@ public class CartServlet extends HttpServlet {
             boolean hasBeenDeleted = cartDAO.deleteFromCart(cartModel, userModel);
             setSessionAttributeAndRedirect(request, response, hasBeenDeleted, "The book has been successfully deleted from the cart!",
                     "The book was not deleted from the cart.", "cart.jsp");
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | IOException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
@@ -89,4 +88,6 @@ public class CartServlet extends HttpServlet {
         httpSession.setAttribute(condition ? "successMessage" : "failMessage", condition ? successMessage : failMessage);
         response.sendRedirect(redirectPage);
     }
+
+
 }
